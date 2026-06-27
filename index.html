@@ -535,15 +535,31 @@
 
                     const data = await response.json();
                     
-                    if (data.error) {
-                        throw new Error(data.error.message || 'Unknown error');
+                    console.log('API Response:', JSON.stringify(data, null, 2));
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${data.error?.message || JSON.stringify(data)}`);
                     }
 
-                    if (!data.contents || !data.contents[0] || !data.contents[0].parts) {
-                        throw new Error('Invalid response format');
+                    if (data.error) {
+                        throw new Error('API Error: ' + (data.error.message || JSON.stringify(data.error)));
+                    }
+
+                    if (!data.contents || !Array.isArray(data.contents) || data.contents.length === 0) {
+                        console.error('Invalid contents:', data);
+                        throw new Error('No content in response. Check API key and image.');
+                    }
+
+                    if (!data.contents[0].parts || !Array.isArray(data.contents[0].parts) || data.contents[0].parts.length === 0) {
+                        console.error('Invalid parts:', data.contents[0]);
+                        throw new Error('No text parts in response');
                     }
 
                     const extractedText = data.contents[0].parts[0].text;
+                    if (!extractedText) {
+                        throw new Error('No text extracted from image');
+                    }
+
                     document.getElementById('extractedText').innerHTML = `<pre>${extractedText}</pre>`;
                     document.getElementById('ocrResult').style.display = 'block';
 
