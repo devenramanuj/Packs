@@ -536,14 +536,25 @@
                                     contents: [{
                                         parts: [
                                             {
-                                                text: `આ image માંથી Receipt & Payment data extract કર:
+                                                text: `તમે expert accountant છો. આ બેંક statement/Rozmel page નો analysis કર અને exact transactions extract કર.
 
-ધ્યાનપૂર્વક extract કર:
-1. Date, Particulars, Receipt Amount, Payment Amount, Balance
-2. Row by row data
-3. Format: Date | Particulars | Receipt | Payment | Balance
+ધ્યાનમાં રાખ:
+1. Date: YYYY-MM-DD format
+2. Particulars: લેનદેન વર્ણન (party name, વર્ણન)
+3. Receipt (Credit/Deposit): આવતી રકમ (ધણી મોટી ત્રીજી જોય તો તે receipt છે)
+4. Payment (Debit/Withdrawal): જતી રકમ
+5. Balance: અંતિમ બેલેન્સ
 
-જો unreadable હોય તો જણાવ.`
+Format કરી કે Debit column = Payment amount
+Credit column = Receipt amount
+
+Output ONLY valid JSON array - NO markdown, NO backticks:
+[
+  {"date": "2026-06-27", "particulars": "Loan Disbursement", "receipt": 50000.00, "payment": 0.00, "balance": 150000.00},
+  {"date": "2026-06-28", "particulars": "Withdrawal", "receipt": 0.00, "payment": 25000.00, "balance": 125000.00}
+]
+
+IMPORTANT: Numbers must be extracted exactly as shown. Do NOT use 0 if amount exists.`
                                             },
                                             {
                                                 inlineData: {
